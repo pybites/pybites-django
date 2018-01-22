@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<title>PyBites 100 Days of Django</title>
+	{% load static %}
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'pyplanet/style.css' %}" />
+	<script type="text/javascript" async src="https://platform.twitter.com/widgets.js"></script>
+  </head>
+  <body>
+  <header>
+    <h1>{% block title %}{% endblock %}</h1>
+
+    <div id="login">
+	  {% if user.is_authenticated %}
+        Welcome back, {{ user.username }}!  <a href="{% url 'logout' %}">Logout</a>
+
+		{% if user.is_superuser %}
+	      &nbsp;|&nbsp;<a href="{% url 'admin:index' %}">Admin</a>
+        {% endif %}
+
+	  {% elif 'login' not in request.build_absolute_uri %}
+        <a href="{% url 'login' %}">Login</a>
+      {% endif %}
+
+	  &nbsp;|&nbsp;<a href="{% url 'index' %}">Home</a>
+    </div>
+
+  </header>
+
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+  <br>
+  <hr>
+  <footer>
+    Created by <a href="https://pybit.es" target="_blank">PyBites</a> as <a href="https://github.com/pybites/pyplanet-django" target="_blank">first app</a> for our <a href="https://pybit.es/special-100days-of-code.html" target="_blank">100 Days of Django</a>
+  </footer>
+</body>
+</html>

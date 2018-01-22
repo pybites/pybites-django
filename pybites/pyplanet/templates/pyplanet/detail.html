@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<h2><a href='{{ article.url }}'>{{ article.title }}</a></h2>
+
+    <div class="pure-button-group" role="group" aria-label="...">
+	    {% if user.is_superuser %}
+
+			{% if article.status == 0 %}
+				<a class="pure-button pure-button-primary" href='{{ tweet_url_su }}' target="_blank">Tweet this</a>
+				<a class="pure-button button-success" href='{% url 'pyplanet:share' article.id %}'>Mark Shared</a>
+				<a class="pure-button button-warning" href='{% url 'pyplanet:skip' article.id %}'>Mark Skipped</a>
+			{% elif article.status == 1 %}
+				<button class="pure-button button-warning pure-button-disabled">Already skipped</button>
+			{% elif article.status == 2 %}
+				<button class="pure-button button-success pure-button-disabled">Already shared</button>
+			{% endif %}
+
+	    {% elif user.is_authenticated %}
+
+			<a class="pure-button pure-button-primary" href='{{ tweet_url_guest }}' target="_blank">Tweet this</a>
+
+        {% endif %}
+
+        <a class='pure-button pure-button-active' href="{% url 'pyplanet:index' %}">Go back</a>
+    </div>
+
+    <br>
+    <hr>
+
+	<h3>Article: </h3>
+
+	<p>(published: {{ article.published }})</p>
+
+	{{ article.summary|safe }}
+
+{% endblock %}
