@@ -13,12 +13,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import json
 
-from django.core.exceptions import ImproperlyConfigured
-
 from decouple import config, Csv
 import dj_database_url
 
-#get secret key
 SECRET_KEY = config("SECRET_KEY")
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
