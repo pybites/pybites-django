@@ -18,8 +18,11 @@ from django.core.exceptions import ImproperlyConfigured
 import dj_database_url
 
 # https://medium.com/@ayarshabeer/django-best-practice-settings-file-for-multiple-environments-6d71c6966ee2
-with open(os.environ.get('MYSITE_CONFIG')) as f:
-    configs = json.loads(f.read())
+try:
+    with open(os.environ.get('MYSITE_CONFIG')) as f:
+        configs = json.loads(f.read())
+except:
+    configs = {}
 
 def get_env_var(setting, configs=configs):
     try:
