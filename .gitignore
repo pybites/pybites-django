@@ -32,4 +32,4 @@ db.sqlite3
 pybites/pybites/pybites/
 
 **.cache
-gitbu
+.env

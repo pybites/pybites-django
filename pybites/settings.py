@@ -15,29 +15,12 @@ import json
 
 from django.core.exceptions import ImproperlyConfigured
 
+from decouple import config, Csv
 import dj_database_url
 
-# https://medium.com/@ayarshabeer/django-best-practice-settings-file-for-multiple-environments-6d71c6966ee2
-try:
-    with open(os.environ.get('MYSITE_CONFIG')) as f:
-        configs = json.loads(f.read())
-except:
-    configs = {}
-
-def get_env_var(setting, configs=configs):
-    try:
-        val = configs[setting]
-        if val == 'True':
-            val = True
-        elif val == 'False':
-            val = False
-        return val
-    except KeyError:
-        error_msg = "ImproperlyConfigured: Set {0} environment variable".format(setting)
-        raise ImproperlyConfigured(error_msg)
-
 #get secret key
-SECRET_KEY = get_env_var("SECRET_KEY")
+SECRET_KEY = config("SECRET_KEY")
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -95,7 +78,7 @@ WSGI_APPLICATION = 'pybites.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=get_env_var('DATABASE_URL')
+        default=config('DATABASE_URL')
     )
 }
 
