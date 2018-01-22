@@ -13,7 +13,6 @@ FEEDS = [
     'http://planetpython.org/rss20.xml',
     'https://pybit.es/feeds/all.rss.xml',
 ]
-GO_BACK = datetime.now() - timedelta(days=1)
 
 
 def _get_entries():
@@ -24,7 +23,15 @@ def _get_entries():
 class Command(BaseCommand):
     help = 'Imports new Planet Python feed entries into articles table'
 
+    def add_arguments(self, parser):
+        parser.add_argument('days', type=int, nargs='?', default=1)
+
     def handle(self, *args, **options):
+        # optional arg
+        # https://stackoverflow.com/a/35635359
+        days = options['days']
+        go_back = datetime.now() - timedelta(days=days)
+
         count = 0
 
         for entry in sorted(_get_entries(),
@@ -35,7 +42,7 @@ class Command(BaseCommand):
             summary = entry.get('summary', 'No summary available')
             published = entry['published_parsed']
             dt = datetime.fromtimestamp(mktime(published))
-            if dt < GO_BACK:
+            if dt < go_back:
                 continue
             dt = timezone.make_aware(dt, timezone.get_current_timezone())
 
